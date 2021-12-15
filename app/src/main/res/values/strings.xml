@@ -21,5 +21,15 @@
     <string name="number_five">5</string>
     <string name="publication_date">Fecha de publicación</string>
     <string name="date_format">dd-mm-yyyy</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="sign_in">Iniciar Sesión</string>
+    <string name="does_not_have_account"><u>¡No tienes cuenta Registrate!</u></string>
+    <string name="repeat_password">Repita la contraseña</string>
+    <string name="register">Registrar</string>
+    <string name="sign_out">Cerrar sesión</string>
 
 </resources>
