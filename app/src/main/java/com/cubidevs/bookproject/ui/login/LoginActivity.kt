@@ -1,9 +1,11 @@
-package com.cubidevs.bookproject
+package com.cubidevs.bookproject.ui.login
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.cubidevs.bookproject.ui.main.MainActivity
+import com.cubidevs.bookproject.ui.register.RegisterActivity
 import com.cubidevs.bookproject.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -43,7 +45,5 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-
-
     }
 }

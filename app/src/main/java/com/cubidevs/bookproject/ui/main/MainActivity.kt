@@ -1,15 +1,14 @@
-package com.cubidevs.bookproject
+package com.cubidevs.bookproject.ui.main
 
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.cubidevs.bookproject.R
 import com.cubidevs.bookproject.databinding.ActivityMainBinding
-import java.text.SimpleDateFormat
+import com.cubidevs.bookproject.ui.login.LoginActivity
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -18,11 +17,6 @@ class MainActivity : AppCompatActivity() {
     private var cal = Calendar.getInstance()
     private var publicationDate = ""
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        Toast.makeText(this, "Bye Bye", Toast.LENGTH_SHORT).show()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -30,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(mainBinding.root)
 
         //     val nameBookEditText : EditText = findViewById(R.id.name_book_edit_text)
-
+/*
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, month)
@@ -100,11 +94,11 @@ class MainActivity : AppCompatActivity() {
                         )
                 }
             }
-        }
+        }*/
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_overflow, menu)
+        menuInflater.inflate(R.menu.overflow_menu, menu)
         return true
     }
 
@@ -119,35 +113,5 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("state","onStart")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("state","onResume")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.d("state","onPause")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("state","onStop")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("state","onDestroy")
-    }
-
-    override fun onRestart() {
-        super.onRestart()
-        Log.d("state","onRestart")
     }
 }

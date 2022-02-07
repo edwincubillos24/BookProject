@@ -1,10 +1,11 @@
-package com.cubidevs.bookproject
+package com.cubidevs.bookproject.ui.register
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.cubidevs.bookproject.databinding.ActivityRegisterBinding
+import com.cubidevs.bookproject.ui.login.LoginActivity
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -14,7 +15,6 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(registerBinding.root)
-
 
         with(registerBinding) {
             registerButton.setOnClickListener {
