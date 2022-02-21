@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cubidevs.bookproject.local.Book
-import com.cubidevs.bookproject.repository.BookRepository
+import com.cubidevs.bookproject.local.localrepository.BookRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

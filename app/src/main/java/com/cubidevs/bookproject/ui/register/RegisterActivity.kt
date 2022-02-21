@@ -1,14 +1,15 @@
 package com.cubidevs.bookproject.ui.register
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.cubidevs.bookproject.databinding.ActivityRegisterBinding
-import com.cubidevs.bookproject.ui.login.LoginActivity
+import com.cubidevs.bookproject.server.Role
+import com.cubidevs.bookproject.server.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
@@ -39,6 +40,7 @@ class RegisterActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d("Register", "createUserWithEmail:success")
+                                createUser(auth.currentUser?.uid, email)
                                 onBackPressed()
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -58,4 +60,16 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun createUser(uid: String?, email: String) {
+        val db = Firebase.firestore
+        val user = User(uid = uid, email = email, role = Role.VENDEDOR)
+        uid?.let { uid->
+            db.collection("users").document(uid).set(user)
+                .addOnSuccessListener {
+                    Toast.makeText(baseContext,"Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
 }

@@ -3,7 +3,8 @@ package com.cubidevs.bookproject.ui.newbook
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cubidevs.bookproject.repository.BookRepository
+import com.cubidevs.bookproject.local.localrepository.BookRepository
+import com.cubidevs.bookproject.server.serverrepository.BookServerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -11,6 +12,7 @@ import kotlinx.coroutines.launch
 class NewBookViewModel : ViewModel() {
 
     private val bookRepository = BookRepository()
+    private val bookServerRepository = BookServerRepository()
 
     private val msg: MutableLiveData<String> = MutableLiveData()
     val msgDone: LiveData<String> = msg
@@ -37,6 +39,12 @@ class NewBookViewModel : ViewModel() {
     ) {
         GlobalScope.launch(Dispatchers.IO) {
             bookRepository.saveBook(nameBook, author, pages, resume, genre, score, publicationDate)
+        }
+    }
+
+    fun saveBookInServer(nameBook: String, author: String, pages: Int, resume: String, genre: String, score: Int, publicationDate: String) {
+        GlobalScope.launch(Dispatchers.IO){
+            bookServerRepository.saveBook(nameBook, author, pages, resume, genre, score, publicationDate)
         }
     }
 

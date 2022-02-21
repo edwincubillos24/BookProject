@@ -1,4 +1,4 @@
-package com.cubidevs.bookproject.repository
+package com.cubidevs.bookproject.local.localrepository
 
 import com.cubidevs.bookproject.BookProject
 import com.cubidevs.bookproject.local.Book

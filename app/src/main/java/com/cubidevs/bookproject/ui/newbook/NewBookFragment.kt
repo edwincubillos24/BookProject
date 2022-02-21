@@ -31,13 +31,13 @@ class NewBookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        newBookViewModel.msgDone.observe(viewLifecycleOwner, { result ->
+        newBookViewModel.msgDone.observe(viewLifecycleOwner) { result ->
             onMsgDoneSubscribe(result)
-        })
+        }
 
-        newBookViewModel.dataValidated.observe(viewLifecycleOwner, { result ->
+        newBookViewModel.dataValidated.observe(viewLifecycleOwner) { result ->
             onDataValidatedSubscribe(result)
-        })
+        }
 
         val dateSetListener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
@@ -94,7 +94,8 @@ class NewBookFragment : Fragment() {
                 else -> 5
             }
 
-            newBookViewModel.saveBook(nameBook, author, pages, resume, genre, score, publicationDate)
+            //newBookViewModel.saveBook(nameBook, author, pages, resume, genre, score, publicationDate)
+            newBookViewModel.saveBookInServer(nameBook, author, pages, resume, genre, score, publicationDate)
         }
     }
 

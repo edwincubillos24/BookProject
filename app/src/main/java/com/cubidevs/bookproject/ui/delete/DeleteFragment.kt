@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.cubidevs.bookproject.R
 import com.cubidevs.bookproject.databinding.FragmentDeleteBinding
 import com.cubidevs.bookproject.local.Book
+import com.cubidevs.bookproject.server.BookServer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DeleteFragment : Fragment() {
@@ -30,15 +31,39 @@ class DeleteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        deleteViewModel.findBookDone.observe(viewLifecycleOwner, {result ->
+        deleteViewModel.findBookDone.observe(viewLifecycleOwner) { result ->
             onFindBookDoneSubscribe(result)
-        })
+        }
+
+        deleteViewModel.findBookServerDone.observe(viewLifecycleOwner){result->
+            onFindBookServerDoneSubscribe(result)
+        }
 
         with(deleteBinding) {
             searchButton.setOnClickListener {
                 deleteViewModel.searchBook(nameEditText.text.toString())
             }
         }
+    }
+
+    private fun onFindBookServerDoneSubscribe(book: BookServer?) {
+        if (book == null){
+            Toast.makeText(requireContext(), "Libro no encontrado", Toast.LENGTH_SHORT).show()
+        } else{
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(resources.getString(R.string.warning_title))
+                .setMessage(resources.getString(R.string.delete_book_msg, book.name, book.author))
+                .setNegativeButton(resources.getString(R.string.cancel)) { dialog, which ->
+                    // Respond to negative button press
+                }
+                .setPositiveButton(resources.getString(R.string.accept)) { dialog, which ->
+                    deleteViewModel.deleteBookServer(book)
+                    deleteBinding.nameEditText.text?.clear()
+                }
+                .show()
+        }
+
+
     }
 
     private fun onFindBookDoneSubscribe(book: Book) {
