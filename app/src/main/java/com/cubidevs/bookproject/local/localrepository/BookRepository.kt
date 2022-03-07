@@ -35,7 +35,6 @@ class BookRepository {
         val bookDao: BookDao = BookProject.database.BookDao()
         val book = bookDao.searchBook(nameBook)
         return book
-
     }
 
     suspend fun deleteBook(book: Book) {
@@ -52,6 +51,5 @@ class BookRepository {
     suspend fun updateBook(book: Book) {
         val bookDao: BookDao = BookProject.database.BookDao()
         bookDao.updateBook(book)
-
     }
 }

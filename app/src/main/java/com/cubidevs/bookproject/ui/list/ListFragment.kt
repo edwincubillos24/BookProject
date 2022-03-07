@@ -11,15 +11,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cubidevs.bookproject.databinding.FragmentListBinding
 import com.cubidevs.bookproject.local.Book
-import java.sql.Types.NULL
+import com.cubidevs.bookproject.server.BookServer
 
 class ListFragment : Fragment() {
 
     private lateinit var listBinding: FragmentListBinding
     private lateinit var listViewModel: ListViewModel
     private lateinit var booksAdapter: BooksAdapter
-    private var booksList: ArrayList<Book> = ArrayList()
-
+    private var booksList: ArrayList<Book> = ArrayList()    //room
+    private var booksListFromServer: ArrayList<BookServer> = ArrayList()    //firebase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,14 +32,19 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        listViewModel.loadBooksDone.observe(viewLifecycleOwner, {result->
+        throw RuntimeException("Test Crash") // Force a crash
+        listViewModel.loadBooksDone.observe(viewLifecycleOwner) { result ->
             onLoadBooksDoneSubscribe(result)
-        })
+        }
 
-        listViewModel.loadBooks()
+        listViewModel.loadBooksFromServerDone.observe(viewLifecycleOwner) { result ->
+            onLoadBooksFromServerDoneSubscribe(result)
+        }
 
-        booksAdapter = BooksAdapter(booksList)
+        //listViewModel.loadBooks()
+        listViewModel.loadBooksFromServer()
+
+        booksAdapter = BooksAdapter(booksListFromServer, onItemClicked = { onBookItemClicked(it)})
 
         listBinding.booksRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@ListFragment.requireContext())
@@ -52,8 +57,17 @@ class ListFragment : Fragment() {
         }
     }
 
-    private fun onLoadBooksDoneSubscribe(booksListLoaded: ArrayList<Book>) {
+    private fun onBookItemClicked(book: BookServer) {
+        findNavController().navigate(ListFragmentDirections.actionListFragmentToDetailFragment(book))
+    }
+
+    private fun onLoadBooksFromServerDoneSubscribe(booksListFromServerLoaded: ArrayList<BookServer>) { //firebase
+        booksListFromServer = booksListFromServerLoaded
+        booksAdapter.appendItems(booksListFromServer)
+    }
+
+    private fun onLoadBooksDoneSubscribe(booksListLoaded: ArrayList<Book>) { //room
         booksList = booksListLoaded
-        booksAdapter.appendItems(booksList)
+        //    booksAdapter.appendItems(booksList)
     }
 }

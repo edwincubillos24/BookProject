@@ -1,7 +1,6 @@
 package com.cubidevs.bookproject.ui.delete
 
 import android.os.Bundle
-import android.system.Os.accept
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,7 @@ class DeleteFragment : Fragment() {
             onFindBookDoneSubscribe(result)
         }
 
-        deleteViewModel.findBookServerDone.observe(viewLifecycleOwner){result->
+        deleteViewModel.findBookServerDone.observe(viewLifecycleOwner) { result ->
             onFindBookServerDoneSubscribe(result)
         }
 
@@ -47,9 +46,9 @@ class DeleteFragment : Fragment() {
     }
 
     private fun onFindBookServerDoneSubscribe(book: BookServer?) {
-        if (book == null){
+        if (book == null) {
             Toast.makeText(requireContext(), "Libro no encontrado", Toast.LENGTH_SHORT).show()
-        } else{
+        } else {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(resources.getString(R.string.warning_title))
                 .setMessage(resources.getString(R.string.delete_book_msg, book.name, book.author))
@@ -62,8 +61,6 @@ class DeleteFragment : Fragment() {
                 }
                 .show()
         }
-
-
     }
 
     private fun onFindBookDoneSubscribe(book: Book) {
@@ -79,5 +76,4 @@ class DeleteFragment : Fragment() {
             }
             .show()
     }
-
 }

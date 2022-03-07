@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cubidevs.bookproject.R
 import com.cubidevs.bookproject.databinding.CardViewItemBookBinding
-import com.cubidevs.bookproject.local.Book
+import com.cubidevs.bookproject.server.BookServer
+import com.squareup.picasso.Picasso
 
 class BooksAdapter(
-    private val booksList: ArrayList<Book>
+    private val booksList: ArrayList<BookServer>,
+    private val onItemClicked: (BookServer) -> Unit
 ) : RecyclerView.Adapter<BooksAdapter.BookViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
@@ -21,12 +23,12 @@ class BooksAdapter(
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val book = booksList[position]
         holder.bind(book)
+        holder.itemView.setOnClickListener { onItemClicked(booksList[position]) }
     }
 
     override fun getItemCount(): Int = booksList.size
 
-
-    fun appendItems(newList: ArrayList<Book>) {
+    fun appendItems(newList: ArrayList<BookServer>) {
         booksList.clear()
         booksList.addAll(newList)
         notifyDataSetChanged()
@@ -34,10 +36,13 @@ class BooksAdapter(
 
     class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = CardViewItemBookBinding.bind(itemView)
-        fun bind(book: Book) {
-            with(binding){
+        private val context = binding.root
+        fun bind(book: BookServer) {
+            with(binding) {
                 nameBookTextView.text = book.name
                 authorTextView.text = book.author
+                //     Glide.with(context).load(book.urlPicture).into(pictureBookImageView)
+                Picasso.get().load(book.urlPicture).into(pictureBookImageView)
             }
         }
     }

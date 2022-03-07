@@ -1,13 +1,18 @@
 package com.cubidevs.bookproject.ui.newbook
 
+import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.cubidevs.bookproject.R
 import com.cubidevs.bookproject.databinding.FragmentNewBookBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,10 +24,9 @@ class NewBookFragment : Fragment() {
     private var cal = Calendar.getInstance()
     private var publicationDate = ""
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    val REQUEST_IMAGE_CAPTURE = 1
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         newBookBinding = FragmentNewBookBinding.inflate(inflater, container, false)
         newBookViewModel = ViewModelProvider(this).get(NewBookViewModel::class.java)
         return newBookBinding.root
@@ -69,6 +73,26 @@ class NewBookFragment : Fragment() {
                     pagesEditText.text.toString()
                 )
             }
+
+            photoImageView.setOnClickListener {
+                dispatchTakePictureIntent()
+            }
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also{ takePictureIntent ->
+            takePictureIntent.resolveActivity(requireActivity().packageManager).also {
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){ //proviene de la camara
+            val imageBitmap = data?.extras?.get("data") as Bitmap
+            newBookBinding.photoImageView.setImageBitmap(imageBitmap)
         }
     }
 

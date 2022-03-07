@@ -7,6 +7,7 @@ import com.cubidevs.bookproject.local.Book
 import com.cubidevs.bookproject.local.localrepository.BookRepository
 import com.cubidevs.bookproject.server.BookServer
 import com.cubidevs.bookproject.server.serverrepository.BookServerRepository
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -25,7 +26,16 @@ class DeleteViewModel : ViewModel() {
     fun searchBook(nameBook: String) {
         GlobalScope.launch(Dispatchers.IO) {
             //findBook.postValue(bookRepository.searchBook(nameBook))
-            findBookServer.postValue(bookServerRepository.searchBook(nameBook))
+            val result = bookServerRepository.loadBooks()
+            var isFoundBook = false
+            for (document in result) {
+                val bookServer: BookServer = document.toObject<BookServer>()
+                if (nameBook == bookServer.name) {
+                    findBookServer.postValue(bookServer)
+                    isFoundBook = true
+                }
+            }
+            if (!isFoundBook) findBookServer.postValue(null)
         }
     }
 

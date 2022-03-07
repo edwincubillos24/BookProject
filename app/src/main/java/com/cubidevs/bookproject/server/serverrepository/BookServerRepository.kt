@@ -1,9 +1,12 @@
 package com.cubidevs.bookproject.server.serverrepository
 
 import com.cubidevs.bookproject.server.BookServer
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class BookServerRepository {
 
@@ -35,19 +38,10 @@ class BookServerRepository {
         db.collection("books").document(documentBook.id).set(book)
     }
 
-    fun searchBook(nameBook: String): BookServer? {
-        var bookServerFound: BookServer? = null
-        db.collection("books")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val bookServer: BookServer = document.toObject<BookServer>()
-                    if (nameBook == bookServer.name) {
-                        bookServerFound = bookServer
-                    }
-                }
-            }
-        return bookServerFound
+    suspend fun loadBooks(): QuerySnapshot {
+        return withContext(Dispatchers.IO) {
+            db.collection("books").get().await()
+        }
     }
 
     fun deleteBook(book: BookServer) {
@@ -56,6 +50,5 @@ class BookServerRepository {
                 .document(id)
                 .delete()
         }
-
     }
 }

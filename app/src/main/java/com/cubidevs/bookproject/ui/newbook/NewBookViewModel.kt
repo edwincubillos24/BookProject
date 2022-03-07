@@ -8,6 +8,8 @@ import com.cubidevs.bookproject.server.serverrepository.BookServerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.IOException
 
 class NewBookViewModel : ViewModel() {
 
@@ -47,5 +49,4 @@ class NewBookViewModel : ViewModel() {
             bookServerRepository.saveBook(nameBook, author, pages, resume, genre, score, publicationDate)
         }
     }
-
 }

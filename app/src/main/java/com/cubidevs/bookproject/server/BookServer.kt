@@ -1,5 +1,7 @@
 package com.cubidevs.bookproject.server
 
+import java.io.Serializable
+
 data class BookServer(
     var id: String? = null,
     var name: String? = null,
@@ -8,5 +10,6 @@ data class BookServer(
     var resume: String? = null,
     var genre: String? = null,
     var score: Int? = null,
-    var publicationDate: String? = null
-)
+    var publicationDate: String? = null,
+    var urlPicture: String? = null
+) : Serializable
