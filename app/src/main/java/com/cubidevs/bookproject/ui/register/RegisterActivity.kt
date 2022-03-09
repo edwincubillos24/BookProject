@@ -4,24 +4,31 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.cubidevs.bookproject.databinding.ActivityRegisterBinding
 import com.cubidevs.bookproject.server.Role
 import com.cubidevs.bookproject.server.User
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var registerBinding: ActivityRegisterBinding
-    private lateinit var auth: FirebaseAuth
+    private lateinit var registerViewModel: RegisterViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(registerBinding.root)
-        auth = Firebase.auth
+        registerViewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
+
+        registerViewModel.errorMsgDone.observe(this) { result ->
+            onErrorMsgDoneSubscribe(result)
+        }
+
+        registerViewModel.registerSucessDone.observe(this){ result->
+            onRegisterSucessDoneSubscribe(result)
+        }
 
         with(registerBinding) {
             registerButton.setOnClickListener {
@@ -35,22 +42,7 @@ class RegisterActivity : AppCompatActivity() {
                         intent.putExtra("password", password)
                         startActivity(intent)*/
 
-                    auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("Register", "createUserWithEmail:success")
-                                createUser(auth.currentUser?.uid, email)
-                                onBackPressed()
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("Register", "createUserWithEmail:failure", task.exception)
-                                Toast.makeText(
-                                    baseContext, task.exception?.message.toString(),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
+                    registerViewModel.registerUser(email, password)
                 } else
                     Toast.makeText(
                         applicationContext,
@@ -61,13 +53,23 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
+    private fun onRegisterSucessDoneSubscribe(uid: String?) {
+        uid?.let { Log.d("uid", it) }
+        registerViewModel.createUser(uid, registerBinding.emailEditText.text.toString())
+    }
+
+    private fun onErrorMsgDoneSubscribe(result: String?) {
+        Toast.makeText(baseContext, result, Toast.LENGTH_SHORT).show()
+    }
+
     private fun createUser(uid: String?, email: String) {
+      //  registerViewModel.createUser(uid)
         val db = Firebase.firestore
         val user = User(uid = uid, email = email, role = Role.VENDEDOR)
-        uid?.let { uid->
+        uid?.let { uid ->
             db.collection("users").document(uid).set(user)
                 .addOnSuccessListener {
-                    Toast.makeText(baseContext,"Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, "Usuario creado exitosamente", Toast.LENGTH_SHORT).show()
                 }
         }
     }

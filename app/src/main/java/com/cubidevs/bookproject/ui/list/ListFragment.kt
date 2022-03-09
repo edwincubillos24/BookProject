@@ -32,7 +32,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        throw RuntimeException("Test Crash") // Force a crash
+
         listViewModel.loadBooksDone.observe(viewLifecycleOwner) { result ->
             onLoadBooksDoneSubscribe(result)
         }
